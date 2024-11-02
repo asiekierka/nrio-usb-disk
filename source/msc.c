@@ -159,9 +159,12 @@ bool tud_msc_start_stop_cb(uint8_t lun, uint8_t power_condition, bool start, boo
 int32_t tud_msc_read10_cb(uint8_t lun, uint32_t lba, uint32_t offset, void* buffer, uint32_t bufsize) {
   const DISC_INTERFACE *io = dldiGetInternal();
 
+  ui_toggle_blink_activity();
   if (!(bufsize & 0x1FF) && !offset && io->readSectors(lba, bufsize >> 9, buffer)) {
+    ui_toggle_blink_activity();
     return bufsize;
   } else {
+    ui_toggle_blink_activity();
     printf(UI_COLOR_ERROR "Read error [%ld, %ld]\n", lba, bufsize);
     return 0;
   }
@@ -178,9 +181,12 @@ bool tud_msc_is_writable_cb(uint8_t lun) {
 int32_t tud_msc_write10_cb(uint8_t lun, uint32_t lba, uint32_t offset, uint8_t* buffer, uint32_t bufsize) {
   const DISC_INTERFACE *io = dldiGetInternal();
 
+  ui_toggle_blink_write_activity();
   if (!(bufsize & 0x1FF) && !offset && io->writeSectors(lba, bufsize >> 9, buffer)) {
+    ui_toggle_blink_write_activity();
     return bufsize;
   } else {
+    ui_toggle_blink_write_activity();
     printf(UI_COLOR_ERROR "Write error [%ld, %ld]\n", lba, bufsize);
     return 0;
   }

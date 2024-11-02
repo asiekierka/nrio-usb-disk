@@ -61,6 +61,7 @@ int main(void) {
   tusb_init(BOARD_TUD_RHPORT, &dev_init);
 
   ui_init();
+
   if (isDSiMode()) {
     printf(UI_COLOR_ERROR "This program is not compatible with DSi/3DS consoles.\n");
     exit_to_loader();
@@ -71,7 +72,7 @@ int main(void) {
     exit_to_loader();
   }
 
-  printf(UI_COLOR_INFO "Ready.\n");
+  printf(UI_COLOR_INFO "Ready. Press START to exit.\n");
 
   while (1) {
     tud_task();

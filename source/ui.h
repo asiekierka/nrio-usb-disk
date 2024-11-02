@@ -10,6 +10,8 @@
 #define UI_COLOR_SUCCESS "\x1b[32;1m"
 #define UI_COLOR_WARNING "\x1b[33;1m"
 
+void ui_toggle_blink_activity(void);
+void ui_toggle_blink_write_activity(void);
 void ui_init(void);
 void ui_select_top(void);
 void ui_select_bottom(void);
