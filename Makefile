@@ -12,10 +12,12 @@ ARM_NONE_EABI_PATH	?= $(WONDERFUL_TOOLCHAIN)/toolchain/gcc-arm-none-eabi/bin/
 # ===========
 
 NAME		:= nrio-usb-disk
+VERSION		:= 0.1
+GIT_HASH	:= $(shell git rev-parse --short HEAD)
 
 GAME_TITLE	:= nrio-usb-disk
 GAME_SUBTITLE	:=
-GAME_AUTHOR	:= v0.1
+GAME_AUTHOR	:= v$(VERSION)
 GAME_ICON	:= icon.png
 
 # DLDI and internal SD slot of DSi
@@ -40,7 +42,7 @@ NITROFSDIR	:=
 # Defines passed to all files
 # ---------------------------
 
-DEFINES		:= -DPICOLIBC_LONG_LONG_PRINTF_SCANF
+DEFINES		:= -DVERSION=\"$(VERSION)\" -DGIT_HASH=\"$(GIT_HASH)\" -DPICOLIBC_LONG_LONG_PRINTF_SCANF
 
 # Libraries
 # ---------

@@ -85,12 +85,14 @@ int main(void) {
 
 // Invoked when device is mounted
 void tud_mount_cb(void) {
+  fifoSendValue32(FIFO_PM, PM_REQ_SLEEP_DISABLE);
   printf(UI_COLOR_INFO "Device connected.\n");
 }
 
 // Invoked when device is unmounted
 void tud_umount_cb(void) {
   printf(UI_COLOR_INFO "Device disconnected.\n");
+  fifoSendValue32(FIFO_PM, PM_REQ_SLEEP_ENABLE);
 }
 
 // Invoked when usb bus is suspended
