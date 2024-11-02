@@ -59,12 +59,17 @@ int main(void) {
     .role = TUSB_ROLE_DEVICE,
     .speed = TUSB_SPEED_AUTO
   };
-  tusb_init(BOARD_TUD_RHPORT, &dev_init);
+  bool usb_init_status = !isDSiMode() && tusb_init(BOARD_TUD_RHPORT, &dev_init);
 
   ui_init();
 
   if (isDSiMode()) {
     printf(UI_COLOR_ERROR "This program is not compatible with DSi/3DS consoles.\n");
+    exit_to_loader();
+  }
+
+  if (!usb_init_status) {
+    printf(UI_COLOR_ERROR "Could not initialize USB!\n");
     exit_to_loader();
   }
 
@@ -95,6 +100,7 @@ int main(void) {
     }
   }
 
+  tud_deinit(0);
   powerOn(POWER_ALL);
 }
 
