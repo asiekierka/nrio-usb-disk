@@ -43,6 +43,7 @@ NITROFSDIR	:=
 # ---------------------------
 
 DEFINES		:= -DVERSION=\"$(VERSION)\" -DGIT_HASH=\"$(GIT_HASH)\" -DPICOLIBC_LONG_LONG_PRINTF_SCANF
+DEFINES		+= -DCFG_TUD_NRIO_DMA_CHANNEL=3
 
 # Libraries
 # ---------
