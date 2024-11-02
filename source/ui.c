@@ -12,8 +12,8 @@
 static PrintConsole bottomConsole, topConsole;
 
 #define NRIO_REG(index) GBA_BUS[(index) * 0x10000]
-#define NRIO_CHIP_ID   NRIO_REG(0x70)
-#define NRIO_CHIP_REV  NRIO_REG(0x72)
+#define NRIO_CHIP_IDL  NRIO_REG(0x70)
+#define NRIO_CHIP_IDH  NRIO_REG(0x72)
 
 void ui_toggle_blink_activity(void) {
     topConsole.fontBgMap[(23 * 32) + 30] ^= 0xA000;
@@ -60,8 +60,10 @@ void ui_init(void) {
     printf("\x1b[30;1m\n");
     printf("     \\__,_|_|__/_|\\_\\ " GIT_HASH);
 
+    uint32_t chip_id = (NRIO_CHIP_IDH << 16) | NRIO_CHIP_IDL;
+
     printf("\x1b[21;0H");
-    printf("\x1b[37;1mUSB controller %04X, rev %02X\n", NRIO_CHIP_ID, NRIO_CHIP_REV & 0xFF);
+    printf("\x1b[37;1mUSB controller %04X, rev %02X\n", (int) ((chip_id >> 8) & 0xFFFF), (int) (chip_id & 0xFF));
     printf("\x1b[37;0m%s", io_dldi_data->friendlyName);
 
     printf("\x1b[23;27H");
