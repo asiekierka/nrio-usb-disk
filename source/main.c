@@ -53,6 +53,7 @@ static void exit_to_loader(void) {
 
 int main(void) {
   defaultExceptionHandler();
+  powerOff(POWER_3D_CORE | POWER_MATRIX);
 
   tusb_rhport_init_t dev_init = {
     .role = TUSB_ROLE_DEVICE,
@@ -74,13 +75,27 @@ int main(void) {
 
   printf(UI_COLOR_INFO "Ready. Press START to exit.\n");
 
+  bool last_key_lid = false;
+
   while (1) {
     tud_task();
 
     scanKeys();
     if (keysDown() & KEY_START)
         break;
+
+    bool curr_key_lid = keysHeld() & KEY_LID;
+    if (last_key_lid != curr_key_lid) {
+      if (curr_key_lid)
+        powerOff(POWER_ALL_2D);
+      else
+        powerOn(POWER_ALL_2D);
+      swiWaitForVBlank();
+      last_key_lid = curr_key_lid;
+    }
   }
+
+  powerOn(POWER_ALL);
 }
 
 // Invoked when device is mounted
