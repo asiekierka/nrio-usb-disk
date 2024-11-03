@@ -12,7 +12,8 @@
 
 void ui_toggle_blink_activity(void);
 void ui_toggle_blink_write_activity(void);
-void ui_init(void);
+void ui_init1(void);
+void ui_init2(void);
 void ui_select_top(void);
 void ui_select_bottom(void);
 

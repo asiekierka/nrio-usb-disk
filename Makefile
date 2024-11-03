@@ -12,8 +12,9 @@ ARM_NONE_EABI_PATH	?= $(WONDERFUL_TOOLCHAIN)/toolchain/gcc-arm-none-eabi/bin/
 # ===========
 
 NAME		:= nrio-usb-disk
-VERSION		:= 0.1.1
+VERSION		:= 0.2.0
 GIT_HASH	:= $(shell git rev-parse --short HEAD)
+LTO		:= 1
 
 GAME_TITLE	:= nrio-usb-disk
 GAME_SUBTITLE	:=
@@ -144,7 +145,7 @@ ASFLAGS		+= -x assembler-with-cpp $(INCLUDEFLAGS) $(DEFINES) \
 
 CFLAGS		+= -std=gnu17 $(WARNFLAGS) $(INCLUDEFLAGS) $(DEFINES) \
 		   $(ARCH) -O2 -ffunction-sections -fdata-sections \
-		   -specs=$(SPECS) -flto
+		   -specs=$(SPECS)
 
 CXXFLAGS	+= -std=gnu++17 $(WARNFLAGS) $(INCLUDEFLAGS) $(DEFINES) \
 		   $(ARCH) -O2 -ffunction-sections -fdata-sections \
@@ -152,7 +153,13 @@ CXXFLAGS	+= -std=gnu++17 $(WARNFLAGS) $(INCLUDEFLAGS) $(DEFINES) \
 		   -specs=$(SPECS)
 
 LDFLAGS		:= $(ARCH) $(LIBDIRSFLAGS) -Wl,-Map,$(MAP) $(DEFINES) \
-		   -Wl,--start-group $(LIBS) -Wl,--end-group -specs=$(SPECS) -flto
+		   -Wl,--start-group $(LIBS) -Wl,--end-group -specs=$(SPECS)
+
+ifeq ($(LTO),1)
+CFLAGS		+= -flto
+CXXFLAGS	+= -flto
+LDFLAGS		+= -flto
+endif
 
 # Intermediate build files
 # ------------------------

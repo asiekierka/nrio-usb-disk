@@ -29,7 +29,7 @@
 //--------------------------------------------------------------------+
 // Device Descriptors
 //--------------------------------------------------------------------+
-tusb_desc_device_t const desc_device =
+tusb_desc_device_t desc_device =
 {
     .bLength            = sizeof(tusb_desc_device_t),
     .bDescriptorType    = TUSB_DESC_DEVICE,
@@ -54,6 +54,7 @@ tusb_desc_device_t const desc_device =
 // Application return pointer to descriptor
 uint8_t const * tud_descriptor_device_cb(void)
 {
+  desc_device.bMaxPacketSize0 = tud_edpt0_get_size();
   return (uint8_t const *) &desc_device;
 }
 
@@ -69,29 +70,9 @@ enum
 
 #define CONFIG_TOTAL_LEN    (TUD_CONFIG_DESC_LEN + TUD_MSC_DESC_LEN)
 
-#if CFG_TUSB_MCU == OPT_MCU_LPC175X_6X || CFG_TUSB_MCU == OPT_MCU_LPC177X_8X || CFG_TUSB_MCU == OPT_MCU_LPC40XX
-  // LPC 17xx and 40xx endpoint type (bulk/interrupt/iso) are fixed by its number
-  //  0 control, 1 In, 2 Bulk, 3 Iso, 4 In, 5 Bulk etc ...
-  #define EPNUM_MSC_OUT   0x02
-  #define EPNUM_MSC_IN    0x82
-
-#elif CFG_TUSB_MCU == OPT_MCU_CXD56
-  // CXD56 USB driver has fixed endpoint type (bulk/interrupt/iso) and direction (IN/OUT) by its number
-  // 0 control (IN/OUT), 1 Bulk (IN), 2 Bulk (OUT), 3 In (IN), 4 Bulk (IN), 5 Bulk (OUT), 6 In (IN)
-  #define EPNUM_MSC_OUT  0x02
-  #define EPNUM_MSC_IN   0x81
-
-#elif defined(TUD_ENDPOINT_ONE_DIRECTION_ONLY)
-  // MCUs that don't support a same endpoint number with different direction IN and OUT defined in tusb_mcu.h
-  //    e.g EP1 OUT & EP1 IN cannot exist together
-  #define EPNUM_MSC_OUT  0x01
-  #define EPNUM_MSC_IN   0x82
-
-#else
-  #define EPNUM_MSC_OUT   0x01
-  #define EPNUM_MSC_IN    0x81
-
-#endif
+// D12 prefers using endpoint 2 for large transfer operations.
+#define EPNUM_MSC_OUT   0x02
+#define EPNUM_MSC_IN    0x82
 
 uint8_t const desc_fs_configuration[] =
 {
