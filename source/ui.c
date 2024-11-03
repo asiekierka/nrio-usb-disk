@@ -20,7 +20,7 @@ void ui_toggle_blink_write_activity(void) {
     topConsole.fontBgMap[(23 * 32) + 29] ^= 0x9000;
 }
 
-void ui_init1(void) {
+void ui_init(void) {
     videoSetMode(MODE_0_2D);
     videoSetModeSub(MODE_0_2D);
 
@@ -65,7 +65,7 @@ void ui_init1(void) {
     }
 }
 
-void ui_init2(void) {
+void ui_show_chip_id(void) {
     uint32_t chip_id = dcd_read_chip_id();
 
     consoleSelect(&topConsole);

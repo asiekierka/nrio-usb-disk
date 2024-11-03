@@ -55,7 +55,7 @@ int main(void) {
   defaultExceptionHandler();
   powerOff(POWER_3D_CORE | POWER_MATRIX);
 
-  ui_init1();
+  ui_init();
 
   tusb_rhport_init_t dev_init = {
     .role = TUSB_ROLE_DEVICE,
@@ -63,12 +63,12 @@ int main(void) {
   };
   bool usb_init_status = !isDSiMode() && tusb_init(BOARD_TUD_RHPORT, &dev_init);
 
-  ui_init2();
-
   if (isDSiMode()) {
     printf(UI_COLOR_ERROR "This program is not compatible with DSi/3DS consoles.\n");
     exit_to_loader();
   }
+
+  ui_show_chip_id();
 
   if (!usb_init_status) {
     printf(UI_COLOR_ERROR "Could not initialize USB!\n");
