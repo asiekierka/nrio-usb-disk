@@ -12,7 +12,7 @@ ARM_NONE_EABI_PATH	?= $(WONDERFUL_TOOLCHAIN)/toolchain/gcc-arm-none-eabi/bin/
 # ===========
 
 NAME		:= nrio-usb-disk
-VERSION		:= 0.2.1
+VERSION		:= 0.2.2
 GIT_HASH	:= $(shell git rev-parse --short HEAD)
 LTO		:= 1
 
