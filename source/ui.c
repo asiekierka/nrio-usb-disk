@@ -61,7 +61,7 @@ void ui_init(void) {
     puts("\x1b[2J" "\x1b[23;0H");
 
     for (int i = 0; i < 8; i++) {
-        topConsole.fontBgMap[(23 * 32) + 24 + i] = ((uint8_t) 'o') + topConsole.fontCharOffset - topConsole.font.asciiOffset;
+        topConsole.fontBgMap[(23 * 32) + 24 + i] = ((uint8_t) '*') + topConsole.fontCharOffset - topConsole.font.asciiOffset;
     }
 }
 
