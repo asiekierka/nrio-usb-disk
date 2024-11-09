@@ -12,12 +12,29 @@ static PrintConsole bottomConsole, topConsole;
 
 extern uint32_t dcd_read_chip_id(void);
 
+DTCM_DATA static volatile u16 activity_value = 0;
+
+void ui_vblank_handler(void) {
+    u16 local_activity_value = activity_value;
+    activity_value = 0;
+
+    if (local_activity_value & 2)
+        topConsole.fontBgMap[(23 * 32) + 30] |= 0xA000;
+    else
+        topConsole.fontBgMap[(23 * 32) + 30] &= ~0xF000;
+
+    if (local_activity_value & 1)
+        topConsole.fontBgMap[(23 * 32) + 29] |= 0x9000;
+    else
+        topConsole.fontBgMap[(23 * 32) + 29] &= ~0xF000;
+}
+
 void ui_toggle_blink_activity(void) {
-    topConsole.fontBgMap[(23 * 32) + 30] ^= 0xA000;
+    activity_value |= 2;
 }
 
 void ui_toggle_blink_write_activity(void) {
-    topConsole.fontBgMap[(23 * 32) + 29] ^= 0x9000;
+    activity_value |= 1;
 }
 
 void ui_init(void) {
@@ -63,6 +80,9 @@ void ui_init(void) {
     for (int i = 0; i < 8; i++) {
         topConsole.fontBgMap[(23 * 32) + 24 + i] = ((uint8_t) '*') + topConsole.fontCharOffset - topConsole.font.asciiOffset;
     }
+
+    irqSet(IRQ_VBLANK, ui_vblank_handler);
+    irqEnable(IRQ_VBLANK);
 }
 
 void ui_show_chip_id(void) {
