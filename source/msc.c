@@ -31,6 +31,11 @@
 static bool ejected = false;
 static bool errata_last_sector = false;
 
+#define DLDI_TYPE_R4TF 0x46543452
+#define DLDI_TYPE_EZ5N 0x4E355A45
+// TODO: Verify if affected by final sector crash bug.
+#define DLDI_TYPE_SG3D 0x44334753
+
 // Initialize DLDI driver.
 bool msc_dldi_initialize(void) {
   const DISC_INTERFACE *io = dldiGetInternal();
@@ -40,10 +45,7 @@ bool msc_dldi_initialize(void) {
     return false;
 
   // Some cartridges crash upon trying to access the final sector.
-  if (
-    !memcmp(&io->ioType, "SG3D", 4) /* TODO: Verify */
-    || !memcmp(&io->ioType, "R4TF", 4)
-  ) {
+  if (io->ioType == DLDI_TYPE_R4TF || io->ioType == DLDI_TYPE_EZ5N || io->ioType == DLDI_TYPE_SG3D) {
     printf(UI_COLOR_WARNING "Enabled workaround for last sector access bug.\n");
     errata_last_sector = true;
   }
