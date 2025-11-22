@@ -128,3 +128,12 @@ void tud_suspend_cb(bool remote_wakeup_en) {
 // Invoked when usb bus is resumed
 void tud_resume_cb(void) {
 }
+
+size_t board_get_unique_id(uint8_t id[], size_t max_len) {
+  (void) max_len;
+  // fixed serial string is 01234567889ABCDEF
+  uint32_t* uid32 = (uint32_t*) (uintptr_t)id;
+  uid32[0] = 0x67452301u;
+  uid32[1] = 0xEFCDAB89u;
+  return 8;
+}
