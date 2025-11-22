@@ -49,9 +49,10 @@ DEFINES		+= -DCFG_TUD_NRIO_DMA_CHANNEL=3
 # Libraries
 # ---------
 
-LIBS		:= -lmm9 -lnds9
-LIBDIRS		:= $(BLOCKSDS)/libs/maxmod \
-		   $(BLOCKSDS)/libs/libnds
+ARM7ELF		:= $(BLOCKSDS)/sys/arm7/main_core/arm7_minimal.elf
+
+LIBS		:= -lnds9
+LIBDIRS		:= $(BLOCKSDS)/libs/libnds
 
 # Build artifacts
 # ---------------
@@ -143,11 +144,11 @@ ASFLAGS		+= -x assembler-with-cpp $(INCLUDEFLAGS) $(DEFINES) \
 		   $(ARCH) -ffunction-sections -fdata-sections \
 		   -specs=$(SPECS)
 
-CFLAGS		+= -std=gnu17 $(WARNFLAGS) $(INCLUDEFLAGS) $(DEFINES) \
+CFLAGS		+= -std=gnu23 $(WARNFLAGS) $(INCLUDEFLAGS) $(DEFINES) \
 		   $(ARCH) -O2 -ffunction-sections -fdata-sections \
 		   -specs=$(SPECS)
 
-CXXFLAGS	+= -std=gnu++17 $(WARNFLAGS) $(INCLUDEFLAGS) $(DEFINES) \
+CXXFLAGS	+= -std=gnu++20 $(WARNFLAGS) $(INCLUDEFLAGS) $(DEFINES) \
 		   $(ARCH) -O2 -ffunction-sections -fdata-sections \
 		   -fno-exceptions -fno-rtti \
 		   -specs=$(SPECS)
@@ -214,7 +215,7 @@ endif
 $(ROM): $(ELF)
 	@echo "  NDSTOOL $@"
 	$(V)$(BLOCKSDS)/tools/ndstool/ndstool -c $@ \
-		-7 $(BLOCKSDS)/sys/default_arm7/arm7.elf -9 $(ELF) \
+		-7 $(ARM7ELF) -9 $(ELF) \
 		-b $(GAME_ICON) "$(GAME_FULL_TITLE)" \
 		-h 0x200 $(NDSTOOL_ARGS)
 

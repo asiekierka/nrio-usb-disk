@@ -37,7 +37,7 @@
 
 static void wait_for_key(uint16_t mask) {
   while (1) {
-    swiWaitForVBlank();
+    cothread_yield_irq(IRQ_VBLANK);
     scanKeys();
 
     if (keysDown() & mask)
@@ -97,7 +97,7 @@ int main(void) {
         powerOff(POWER_ALL_2D);
       else
         powerOn(POWER_ALL_2D);
-      swiWaitForVBlank();
+      cothread_yield_irq(IRQ_VBLANK);
       last_key_lid = curr_key_lid;
     }
   }
